@@ -3,7 +3,8 @@ import time
 import json
 import re
 import numpy as np
-from PIL import Image
+
+import util
 
 
 def pick_color(pixel_rgba, color_mapping) -> str:
@@ -34,10 +35,7 @@ def main():
 
     color_mapping = config['color_mapping']
 
-    im = Image.open(image_path)
-    pixels = np.array(im.getdata())
-    width, height = im.size
-    pixels = pixels.reshape(width, height, 4)
+    pixels = util.read_pixel_data(image_path)
 
     block_image_data = []
     for row in pixels:
