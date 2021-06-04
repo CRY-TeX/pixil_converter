@@ -18,42 +18,6 @@ def pick_color(pixel_rgba, color_mapping) -> str:
     return pick
 
 
-def remove_empty_lines(block_image_data):
-    start_empty_line = 0
-    end_content_line = -1
-
-    for i, line in enumerate(block_image_data):
-        if re.search('^\s*$', line):
-            start_empty_line = i
-        else:
-            break
-
-    for i, line in enumerate(reversed(block_image_data)):
-        if re.search('^\s*$', line):
-            end_content_line = -i
-        else:
-            break
-
-    return block_image_data[start_empty_line:end_content_line]
-
-
-def remove_empty_columns(block_image_data):
-    remove_start = 1000000
-    remove_end = 0
-    for line in block_image_data:
-        match_start = re.search('^\s*\w', line)
-        if match_start:
-            if remove_start > match_start.span()[1]-1:
-                remove_start = match_start.span()[1]-1
-
-        match_end = re.search('\w\s*$', line)
-        if match_end:
-            if remove_end < match_end.span()[0]+1:
-                remove_end = match_end.span()[0]+1
-
-    return [line[remove_start:remove_end] for line in block_image_data]
-
-
 def main():
     # read config
     config = json.load(
@@ -74,8 +38,8 @@ def main():
         block_image_data.append(
             ''.join([pick_color(el, color_mapping) for el in row]))
 
-    block_image_data = remove_empty_lines(block_image_data)
-    block_image_data = remove_empty_columns(block_image_data)
+    block_image_data = util.remove_empty_lines(block_image_data)
+    block_image_data = util.remove_empty_columns(block_image_data)
 
     with open(output_path, 'w') as wf:
         wf.write('\n'.join(block_image_data))

@@ -8,10 +8,6 @@ from PIL import Image
 import util
 
 
-def get_rgba_colors(pixel_rgba) -> dict:
-    return {tuple(col) for row in pixel_rgba for col in row}
-
-
 def main():
     # read config
     config = json.load(
@@ -25,7 +21,7 @@ def main():
 
     pixels = util.read_pixel_data(image_path)
 
-    colors = get_rgba_colors(pixels)
+    colors = util.get_rgba_colors(pixels)
 
     with open(output_path, 'w') as wf:
         for color in colors:
